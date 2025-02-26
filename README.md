@@ -1,10 +1,10 @@
 # Ecommerce API
 
-This is a Java-based ecommerce API project, built using Spring Boot and Docker. The project provides a RESTful API for managing ecommerce-related data, including products, customers, orders, and payments, following the latest best practices.
+This is a Java-based ecommerce API project built with Spring Boot and containerized using Docker. The project provides a RESTful API for managing ecommerce-related data, including products, customers, orders, and payments. It leverages Postgres for data persistence and Kafka for event-driven communication.
 
 ## Getting Started
 
-To run the API, you can use the provided `docker-compose.yml` file to spin up the necessary containers. Simply navigate to the root directory of the project and run the following command:
+To run the API along with its dependencies (Postgres and Kafka), use the provided `docker-compose.yml` file. In the project’s root directory, run:
 
 ```bash
 docker-compose up
