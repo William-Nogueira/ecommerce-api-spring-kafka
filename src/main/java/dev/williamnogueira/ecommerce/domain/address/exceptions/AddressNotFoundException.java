@@ -1,9 +1,10 @@
 package dev.williamnogueira.ecommerce.domain.address.exceptions;
 
-import dev.williamnogueira.ecommerce.infrastructure.exceptions.NotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-public class AddressNotFoundException extends NotFoundException {
+public class AddressNotFoundException extends ResponseStatusException {
     public AddressNotFoundException(String message) {
-        super(message);
+        super(HttpStatus.NOT_FOUND, message);
     }
 }

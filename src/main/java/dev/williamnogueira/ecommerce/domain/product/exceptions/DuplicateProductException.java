@@ -1,9 +1,10 @@
 package dev.williamnogueira.ecommerce.domain.product.exceptions;
 
-import dev.williamnogueira.ecommerce.infrastructure.exceptions.ConflictException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-public class DuplicateProductException extends ConflictException {
+public class DuplicateProductException extends ResponseStatusException {
     public DuplicateProductException(String message) {
-        super(message);
+        super(HttpStatus.CONFLICT, message);
     }
 }

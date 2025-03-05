@@ -1,9 +1,10 @@
 package dev.williamnogueira.ecommerce.domain.order.exceptions;
 
-import dev.williamnogueira.ecommerce.infrastructure.exceptions.BadRequestException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-public class EmptyShoppingCartException extends BadRequestException {
+public class EmptyShoppingCartException extends ResponseStatusException {
     public EmptyShoppingCartException(String message) {
-        super(message);
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }

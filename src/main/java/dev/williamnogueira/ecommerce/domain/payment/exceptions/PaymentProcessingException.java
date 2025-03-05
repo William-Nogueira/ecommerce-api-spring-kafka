@@ -1,9 +1,10 @@
 package dev.williamnogueira.ecommerce.domain.payment.exceptions;
 
-import dev.williamnogueira.ecommerce.infrastructure.exceptions.BadRequestException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-public class PaymentProcessingException extends BadRequestException {
+public class PaymentProcessingException extends ResponseStatusException {
     public PaymentProcessingException(String message) {
-        super(message);
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }

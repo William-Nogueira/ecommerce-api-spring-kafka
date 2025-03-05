@@ -1,9 +1,10 @@
 package dev.williamnogueira.ecommerce.domain.shoppingcart.exceptions;
 
-import dev.williamnogueira.ecommerce.infrastructure.exceptions.BadRequestException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-public class NegativeQuantityException extends BadRequestException {
+public class NegativeQuantityException extends ResponseStatusException {
     public NegativeQuantityException(String message) {
-        super(message);
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }
