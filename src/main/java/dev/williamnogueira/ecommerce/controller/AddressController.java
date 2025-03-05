@@ -16,8 +16,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/address")
 @RequiredArgsConstructor
+@RequestMapping("/api/address")
 public class AddressController {
 
     private final AddressService addressService;
