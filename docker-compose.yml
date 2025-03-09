@@ -27,6 +27,8 @@ services:
       - "5433:5432"
     networks:
       - app-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -56,3 +58,7 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

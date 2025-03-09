@@ -7,14 +7,14 @@ This is a Java-based ecommerce API project built with Spring Boot and containeri
 To run the API along with its dependencies (Postgres and Kafka), use the provided `docker-compose.yml` file. In the project’s root directory, run:
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
-This will start the API, as well as the required Postgres and Kafka containers.
+This will start the API on the port :8081, as well as the required Postgres and Kafka containers.
 
 ## API Documentation
 
-The API documentation can be found at [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html). This page provides a interactive interface for exploring the API endpoints and testing requests.
+The API documentation can be found at [localhost:8081/swagger-ui.html](http://localhost:8080/swagger-ui.html). This page provides a interactive interface for exploring the API endpoints and testing requests.
 
 ## Best Practices
 
