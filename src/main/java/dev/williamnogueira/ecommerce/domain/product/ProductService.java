@@ -7,6 +7,8 @@ import dev.williamnogueira.ecommerce.domain.product.dto.ProductRequestDTO;
 import dev.williamnogueira.ecommerce.domain.product.dto.ProductResponseDTO;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,28 +28,33 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "products", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
     public Page<ProductResponseDTO> findAll(Pageable pageable) {
         return productRepository.findAllByActiveTrue(pageable).map(productMapper::toResponseDTO);
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "products", key = "#id")
     public ProductResponseDTO findById(UUID id) {
         return productMapper.toResponseDTO(getEntity(id));
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "products", key = "'category-' + #category + '-' + #pageable.pageNumber + '-' + #pageable.pageSize")
     public Page<ProductResponseDTO> findAllByCategory(String category, Pageable pageable) {
         return productRepository.findAllByCategoryIgnoreCaseAndActiveTrue(validateCategory(category), pageable)
                 .map(productMapper::toResponseDTO);
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "products", key = "'label-' + #label + '-' + #pageable.pageNumber + '-' + #pageable.pageSize")
     public Page<ProductResponseDTO> findAllByLabel(String label, Pageable pageable) {
         return productRepository.findAllByLabelIgnoreCaseAndActiveTrue(label, pageable)
                 .map(productMapper::toResponseDTO);
     }
 
     @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public ProductResponseDTO create(ProductRequestDTO product) {
 
         if (verifyIfThisSkuAlreadyExists(product.sku())) {
@@ -60,6 +67,7 @@ public class ProductService {
     }
 
     @Transactional
+    @CacheEvict(value = "products", key = "#id")
     public ProductResponseDTO updateById(UUID id, ProductRequestDTO product) {
 
         var entity = getEntity(id);
@@ -75,6 +83,7 @@ public class ProductService {
     }
 
     @Transactional
+    @CacheEvict(value = "products", key = "#id")
     public void deleteById(UUID id) {
         var product = getEntity(id);
 
@@ -83,6 +92,7 @@ public class ProductService {
     }
 
     @Transactional
+    @CacheEvict(value = "products", key = "#id")
     public ProductResponseDTO addStockById(UUID id, Integer quantity) {
         var product = getEntity(id);
         product.setStockQuantity(product.getStockQuantity() + quantity);
@@ -91,6 +101,7 @@ public class ProductService {
     }
 
     @Transactional
+    @CacheEvict(value = "products", key = "#id")
     public void subtractStockQuantity(UUID id, Integer quantity) {
         var product = getEntity(id);
         product.setStockQuantity(product.getStockQuantity() - quantity);

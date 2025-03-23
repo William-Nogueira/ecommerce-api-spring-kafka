@@ -1,6 +1,6 @@
 # Ecommerce API
 
-This is a Java-based ecommerce API project built with Spring Boot and containerized using Docker. The project provides a RESTful API for managing ecommerce-related data, including products, customers, orders, and payments. It leverages Postgres for data persistence and Kafka for event-driven communication.
+This is a Java-based ecommerce API project built with Spring Boot and containerized using Docker. The project provides a RESTful API for managing ecommerce-related data, including products, customers, orders, and payments. It leverages Postgres for data persistence, Kafka for event-driven communication and Redis for caching.
 
 ## Getting Started
 
@@ -14,7 +14,7 @@ This will start the API on the port :8081, as well as the required Postgres and 
 
 ## API Documentation
 
-The API documentation can be found at [localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html). This page provides a interactive interface for exploring the API endpoints and testing requests.
+The API documentation can be found at <a href="http://localhost:8081/swagger-ui.html" target="_blank">localhost:8081/swagger-ui.html</a>. This page provides an interactive interface for exploring the API endpoints and testing requests.
 
 ## Best Practices
 
@@ -35,6 +35,7 @@ The project uses the following dependencies:
 * Spring Boot 3.4.1
 * Postgres 14
 * Spring Kafka 3.3.1
+* Spring Redis 3.4.1
 * Mapstruct 1.5.3.Final
 * Flyway 10.20.1
 * Lombok 1.18.36

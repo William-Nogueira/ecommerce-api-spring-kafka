@@ -1,5 +1,6 @@
 package dev.williamnogueira.ecommerce.domain.product.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -11,5 +12,5 @@ public record ProductResponseDTO(UUID id,
                                  BigDecimal price,
                                  BigDecimal discount,
                                  Integer stockQuantity,
-                                 Byte installments) {
+                                 Byte installments) implements Serializable {
 }
