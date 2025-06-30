@@ -22,5 +22,4 @@ public class PaymentController {
     public ResponseEntity<PaymentProducerResponseDTO> processPayment(@PathVariable UUID orderId) {
         return ResponseEntity.ok(paymentProducer.sendPaymentRequest(orderId.toString()));
     }
-
 }

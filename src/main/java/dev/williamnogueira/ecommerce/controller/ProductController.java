@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,12 +40,14 @@ public class ProductController {
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<Page<ProductResponseDTO>> findByCategory(@PathVariable("category") String category, Pageable pageable) {
+    public ResponseEntity<Page<ProductResponseDTO>> findByCategory(@PathVariable("category") String category,
+                                                                   Pageable pageable) {
         return ResponseEntity.ok(productService.findAllByCategory(category, pageable));
     }
 
     @GetMapping("/label/{label}")
-    public ResponseEntity<Page<ProductResponseDTO>> findByLabel(@PathVariable("label") String label, Pageable pageable) {
+    public ResponseEntity<Page<ProductResponseDTO>> findByLabel(@PathVariable("label") String label,
+                                                                Pageable pageable) {
         return ResponseEntity.ok(productService.findAllByLabel(label, pageable));
     }
 
@@ -59,12 +62,14 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> updateById(@PathVariable UUID id, @Valid @RequestBody ProductRequestDTO product) {
+    public ResponseEntity<ProductResponseDTO> updateById(@PathVariable UUID id,
+                                                         @Valid @RequestBody ProductRequestDTO product) {
         return ResponseEntity.ok(productService.updateById(id, product));
     }
 
-    @PutMapping("/stock/{id}/{quantity}")
-    public ResponseEntity<ProductResponseDTO> addStockById(@PathVariable UUID id, @PathVariable Integer quantity) {
+    @PatchMapping("/stock/{id}/{quantity}")
+    public ResponseEntity<ProductResponseDTO> addStockById(@PathVariable UUID id,
+                                                           @PathVariable Integer quantity) {
         return ResponseEntity.ok(productService.addStockById(id, quantity));
     }
 
@@ -73,5 +78,4 @@ public class ProductController {
         productService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

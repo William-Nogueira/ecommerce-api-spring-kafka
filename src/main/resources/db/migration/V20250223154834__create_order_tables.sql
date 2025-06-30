@@ -16,8 +16,6 @@ CREATE TABLE order_table (
     order_address UUID NOT NULL,
     total_price DECIMAL(19, 2) NOT NULL,
     status VARCHAR(255) NOT NULL,
-    order_date TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
     FOREIGN KEY (customer) REFERENCES customer (id),
     FOREIGN KEY (order_address) REFERENCES order_address (id)
 );

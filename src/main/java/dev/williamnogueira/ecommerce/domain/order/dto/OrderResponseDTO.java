@@ -16,7 +16,7 @@ public record OrderResponseDTO(
     OrderAddressResponseDTO shippingAddress,
     BigDecimal totalPrice,
     String status,
-    LocalDateTime orderDate,
+    LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
 }

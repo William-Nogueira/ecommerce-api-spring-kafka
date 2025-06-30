@@ -1,6 +1,5 @@
 package dev.williamnogueira.ecommerce.domain.shoppingcart;
 
-import dev.williamnogueira.ecommerce.domain.customer.CustomerService;
 import dev.williamnogueira.ecommerce.domain.product.ProductEntity;
 import dev.williamnogueira.ecommerce.domain.product.ProductService;
 import dev.williamnogueira.ecommerce.domain.product.exceptions.ProductNotFoundException;
@@ -16,13 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
 import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.NEGATIVE_QUANTITY;
 import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.PRODUCT_NOT_FOUND_WITH_ID;
 import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.QUANTITY_GREATER_THAN_AVAILABLE;
+import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.SHOPPING_CART_NOT_FOUND;
 import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.SHOPPING_CART_NOT_FOUND_WITH_ID;
 
 @Service
@@ -31,19 +30,18 @@ public class ShoppingCartService {
 
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartItemService shoppingCartItemService;
-    private final CustomerService customerService;
     private final ProductService productService;
     private final ShoppingCartMapper mapper;
 
     @Transactional
-    public ShoppingCartResponseDTO addToCart(ShoppingCartRequestDTO request) {
+    public ShoppingCartResponseDTO addToCart(String customerId, ShoppingCartRequestDTO request) {
         var product = productService.getEntity(request.productId());
 
         if (request.quantity() > product.getStockQuantity()) {
             throw new QuantityGreaterThanAvailableException(QUANTITY_GREATER_THAN_AVAILABLE);
         }
 
-        var cart = findByCustomerId(request.customerId());
+        var cart = findByCustomerId(UUID.fromString(customerId));
 
         buildCartItems(request, cart, product);
         updateTotalPrice(cart);
@@ -55,8 +53,8 @@ public class ShoppingCartService {
     }
 
     @Transactional
-    public ShoppingCartResponseDTO removeFromCart(ShoppingCartRequestDTO request) {
-        var cart = findByCustomerId(request.customerId());
+    public ShoppingCartResponseDTO removeFromCart(String customerId, ShoppingCartRequestDTO request) {
+        var cart = findByCustomerId(UUID.fromString(customerId));
 
         var item = cart.getItems().stream()
                 .filter(i -> i.getProduct().getId().equals(request.productId()))
@@ -94,10 +92,7 @@ public class ShoppingCartService {
 
     public ShoppingCartEntity findByCustomerId(UUID customerId) {
         return shoppingCartRepository.findByCustomerId(customerId)
-                .orElse(ShoppingCartEntity.builder()
-                        .customer(customerService.getEntity(customerId))
-                        .items(new ArrayList<>())
-                        .build());
+                .orElseThrow(() -> new ShoppingCartNotFoundException(SHOPPING_CART_NOT_FOUND));
     }
 
     public ShoppingCartEntity getEntity(UUID id) {
@@ -131,5 +126,4 @@ public class ShoppingCartService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         cart.setTotalPrice(totalPrice);
     }
-
 }

@@ -1,18 +1,14 @@
 package dev.williamnogueira.ecommerce.domain.order.orderaddress;
 
+import dev.williamnogueira.ecommerce.domain.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.UUID;
+import lombok.experimental.SuperBuilder;
 
 @Entity(name = "OrderAddress")
 @Table(name = "order_address")
@@ -20,12 +16,8 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class OrderAddressEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
+@SuperBuilder
+public class OrderAddressEntity extends BaseEntity {
     @Column(nullable = false)
     private String street;
 

@@ -77,7 +77,7 @@ public class ProductService {
         }
 
         validateCategory(product.category());
-        updateEntityFields(entity, product);
+        productMapper.updateEntityFromDto(product, entity);
 
         return productMapper.toResponseDTO(productRepository.save(entity));
     }
@@ -113,16 +113,6 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(String.format(PRODUCT_NOT_FOUND_WITH_ID, id)));
     }
 
-    private void updateEntityFields(ProductEntity entity, ProductRequestDTO product) {
-        entity.setSku(product.sku());
-        entity.setName(product.name());
-        entity.setLabel(product.label());
-        entity.setCategory(validateCategory(product.category()));
-        entity.setPrice(product.price());
-        entity.setDiscount(product.discount());
-        entity.setInstallments(product.installments());
-    }
-
     private ProductCategoryEnum validateCategory(String category) {
         try {
             return ProductCategoryEnum.valueOf(category.toUpperCase());
@@ -134,5 +124,4 @@ public class ProductService {
     private boolean verifyIfThisSkuAlreadyExists(String sku) {
         return productRepository.existsBySku(sku);
     }
-
 }

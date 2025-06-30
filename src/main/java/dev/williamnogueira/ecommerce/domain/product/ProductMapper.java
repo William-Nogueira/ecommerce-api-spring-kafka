@@ -5,6 +5,7 @@ import dev.williamnogueira.ecommerce.domain.product.dto.ProductResponseDTO;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 interface ProductMapper {
@@ -14,4 +15,7 @@ interface ProductMapper {
     ProductEntity toEntity(ProductRequestDTO dto);
 
     ProductResponseDTO toResponseDTO(ProductEntity entity);
+
+    @Mapping(target = "id", ignore = true)
+    void updateEntityFromDto(ProductRequestDTO dto, @MappingTarget ProductEntity entity);
 }

@@ -6,16 +6,17 @@ import dev.williamnogueira.ecommerce.domain.address.exceptions.AddressNotFoundEx
 import dev.williamnogueira.ecommerce.domain.order.dto.OrderResponseDTO;
 import dev.williamnogueira.ecommerce.domain.order.exceptions.EmptyShoppingCartException;
 import dev.williamnogueira.ecommerce.domain.order.exceptions.OrderNotFoundException;
+import dev.williamnogueira.ecommerce.domain.order.kafka.OrderProducer;
 import dev.williamnogueira.ecommerce.domain.order.orderaddress.OrderAddressEntity;
 import dev.williamnogueira.ecommerce.domain.order.orderitem.OrderItemEntity;
 import dev.williamnogueira.ecommerce.domain.shoppingcart.ShoppingCartEntity;
 import dev.williamnogueira.ecommerce.domain.shoppingcart.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +31,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ShoppingCartService shoppingCartService;
     private final OrderMapper orderMapper;
+    private final OrderProducer orderProducer;
 
     @Transactional(readOnly = true)
     public OrderResponseDTO findById(UUID id) {
@@ -52,10 +54,7 @@ public class OrderService {
         order.getOrderItems().forEach(item -> item.setOrder(order));
         orderRepository.save(order);
 
-        shoppingCart.getItems().clear();
-        shoppingCart.setTotalPrice(BigDecimal.ZERO);
-        shoppingCartService.save(shoppingCart);
-
+        orderProducer.clearShoppingCart(String.valueOf(customerId));
         return orderMapper.toResponseDTO(order);
     }
 
@@ -63,8 +62,13 @@ public class OrderService {
     public void updateStatus(String id, OrderStatusEnum status) {
         var order = getEntity(UUID.fromString(id));
         order.setStatus(status);
-        order.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(order);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderResponseDTO> findAllByCustomerId(UUID customerId, Pageable pageable) {
+        return orderRepository.findAllByCustomerId(customerId, pageable)
+                .map(orderMapper::toResponseDTO);
     }
 
     public OrderEntity getEntity(UUID id) {
@@ -89,8 +93,6 @@ public class OrderService {
                 .shippingAddress(orderAddress)
                 .totalPrice(shoppingCart.getTotalPrice())
                 .status(OrderStatusEnum.PENDING)
-                .orderDate(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
     }
 }

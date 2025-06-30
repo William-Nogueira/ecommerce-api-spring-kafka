@@ -14,12 +14,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static dev.williamnogueira.ecommerce.domain.address.AddressTestUtils.*;
-import static dev.williamnogueira.ecommerce.domain.customer.CustomerTestUtils.createCustomerEntity;
+import static dev.williamnogueira.ecommerce.utils.AddressTestUtils.*;
+import static dev.williamnogueira.ecommerce.utils.CustomerTestUtils.createCustomerEntity;
 import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.ADDRESS_NOT_FOUND_WITH_ID;
-import static dev.williamnogueira.ecommerce.utils.TestUtils.ID;
+import static dev.williamnogueira.ecommerce.utils.TestConstants.ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatException;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -104,8 +104,10 @@ class AddressServiceTest {
         when(addressRepository.findById(ID)).thenReturn(Optional.empty());
 
         // act & assert
-        var exception = assertThrows(AddressNotFoundException.class, () -> addressService.getEntity(ID));
-        assertThat(exception.getMessage()).contains(String.format(ADDRESS_NOT_FOUND_WITH_ID, ID));
+        assertThatException()
+                .isThrownBy(() -> addressService.getEntity(ID))
+                .isInstanceOf(AddressNotFoundException.class)
+                .withMessageContaining(String.format(ADDRESS_NOT_FOUND_WITH_ID, ID));
         verify(addressRepository).findById(ID);
     }
 }

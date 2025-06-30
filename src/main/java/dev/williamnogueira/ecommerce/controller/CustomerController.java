@@ -1,6 +1,7 @@
 package dev.williamnogueira.ecommerce.controller;
 
 import dev.williamnogueira.ecommerce.domain.customer.CustomerService;
+import dev.williamnogueira.ecommerce.domain.customer.dto.CustomerPatchDTO;
 import dev.williamnogueira.ecommerce.domain.customer.dto.CustomerRequestDTO;
 import dev.williamnogueira.ecommerce.domain.customer.dto.CustomerResponseDTO;
 import jakarta.validation.Valid;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,11 +45,18 @@ public class CustomerController {
                 .path("/{id}")
                 .buildAndExpand(createdCustomer.id())
                 .toUri();
-        return ResponseEntity.created(location).body(customerService.create(customer));
+        return ResponseEntity.created(location).body(createdCustomer);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerResponseDTO> updateById(@PathVariable UUID id, @Valid @RequestBody CustomerRequestDTO customer) {
+    public ResponseEntity<CustomerResponseDTO> updateById(@PathVariable UUID id,
+                                                          @Valid @RequestBody CustomerRequestDTO customer) {
         return ResponseEntity.ok(customerService.updateById(id, customer));
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<CustomerResponseDTO> patchById(@PathVariable UUID id,
+                                                         @RequestBody CustomerPatchDTO customer) {
+        return ResponseEntity.ok(customerService.patchById(id, customer));
     }
 }

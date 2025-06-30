@@ -2,6 +2,7 @@ package dev.williamnogueira.ecommerce.domain.product.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ProductResponseDTO(UUID id,
@@ -12,5 +13,7 @@ public record ProductResponseDTO(UUID id,
                                  BigDecimal price,
                                  BigDecimal discount,
                                  Integer stockQuantity,
-                                 Byte installments) implements Serializable {
+                                 Byte installments,
+                                 LocalDateTime createdAt,
+                                 LocalDateTime updatedAt) implements Serializable {
 }

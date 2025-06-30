@@ -1,21 +1,24 @@
-package dev.williamnogueira.ecommerce.domain.order;
+package dev.williamnogueira.ecommerce.utils;
 
-import dev.williamnogueira.ecommerce.domain.customer.CustomerTestUtils;
+import dev.williamnogueira.ecommerce.domain.order.OrderEntity;
+import dev.williamnogueira.ecommerce.domain.order.OrderStatusEnum;
 import dev.williamnogueira.ecommerce.domain.order.dto.OrderResponseDTO;
 import dev.williamnogueira.ecommerce.domain.order.orderaddress.OrderAddressEntity;
 import dev.williamnogueira.ecommerce.domain.order.orderaddress.dto.OrderAddressResponseDTO;
 import dev.williamnogueira.ecommerce.domain.order.orderitem.OrderItemEntity;
 import dev.williamnogueira.ecommerce.domain.order.orderitem.dto.OrderItemResponseDTO;
+import lombok.experimental.UtilityClass;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static dev.williamnogueira.ecommerce.domain.customer.CustomerTestUtils.createCustomerEntity;
-import static dev.williamnogueira.ecommerce.domain.product.ProductTestUtils.createProductEntity;
-import static dev.williamnogueira.ecommerce.domain.product.ProductTestUtils.createProductResponseDTO;
-import static dev.williamnogueira.ecommerce.utils.TestUtils.ID;
+import static dev.williamnogueira.ecommerce.utils.CustomerTestUtils.createCustomerEntity;
+import static dev.williamnogueira.ecommerce.utils.ProductTestUtils.createProductEntity;
+import static dev.williamnogueira.ecommerce.utils.ProductTestUtils.createProductResponseDTO;
+import static dev.williamnogueira.ecommerce.utils.TestConstants.ID;
 
+@UtilityClass
 public class OrderTestUtils {
 
     public static OrderAddressEntity createOrderAddressEntity() {
@@ -50,8 +53,6 @@ public class OrderTestUtils {
                 .shippingAddress(createOrderAddressEntity())
                 .totalPrice(BigDecimal.valueOf(100))
                 .status(OrderStatusEnum.PENDING)
-                .orderDate(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
     }
 
@@ -66,7 +67,9 @@ public class OrderTestUtils {
                 address.getState(),
                 address.getCountry(),
                 address.getZipCode(),
-                address.getAdditionalInfo()
+                address.getAdditionalInfo(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
         );
     }
 
@@ -77,7 +80,9 @@ public class OrderTestUtils {
                 createProductResponseDTO(),
                 item.getQuantity(),
                 item.getPriceAtPurchase(),
-                item.getTotalPrice()
+                item.getTotalPrice(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
         );
     }
 
@@ -94,4 +99,3 @@ public class OrderTestUtils {
         );
     }
 }
-

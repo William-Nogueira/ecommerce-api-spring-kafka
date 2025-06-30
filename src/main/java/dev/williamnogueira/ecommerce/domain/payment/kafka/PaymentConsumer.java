@@ -20,7 +20,7 @@ public class PaymentConsumer {
 
     @KafkaListener(topics = PAYMENT_RESPONSE_TOPIC, groupId = GROUP_ID)
     public void consumePaymentResponse(String orderId) {
-        log.info(RECEIVED_PAYMENT_RESPONSE, orderId);
+        log.trace(RECEIVED_PAYMENT_RESPONSE, orderId);
         orderService.updateStatus(orderId, OrderStatusEnum.PAID);
     }
 }

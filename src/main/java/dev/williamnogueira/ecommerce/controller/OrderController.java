@@ -3,6 +3,8 @@ package dev.williamnogueira.ecommerce.controller;
 import dev.williamnogueira.ecommerce.domain.order.OrderService;
 import dev.williamnogueira.ecommerce.domain.order.dto.OrderResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +27,13 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findById(id));
     }
 
-    @PostMapping("/checkout/{customerId}")
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<Page<OrderResponseDTO>> findAllByCustomerId(@PathVariable UUID customerId,
+                                                                      Pageable pageable) {
+        return ResponseEntity.ok(orderService.findAllByCustomerId(customerId, pageable));
+    }
+
+    @PostMapping("/{customerId}")
     public ResponseEntity<OrderResponseDTO> checkout(@PathVariable UUID customerId) {
         var createdOrder = orderService.purchaseShoppingCart(customerId);
         var location = ServletUriComponentsBuilder.fromCurrentRequest()

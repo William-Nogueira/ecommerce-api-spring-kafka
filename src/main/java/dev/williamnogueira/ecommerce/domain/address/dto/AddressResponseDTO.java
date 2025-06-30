@@ -1,5 +1,6 @@
 package dev.williamnogueira.ecommerce.domain.address.dto;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record AddressResponseDTO(
@@ -12,6 +13,8 @@ public record AddressResponseDTO(
     String country,
     String zipCode,
     String type,
-    String additionalInfo
+    String additionalInfo,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
 ) {
 }

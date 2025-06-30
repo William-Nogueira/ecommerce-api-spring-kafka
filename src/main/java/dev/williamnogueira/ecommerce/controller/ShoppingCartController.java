@@ -23,18 +23,20 @@ public class ShoppingCartController {
 
     private final ShoppingCartService shoppingCartService;
 
-    @PostMapping("/add")
-    public ResponseEntity<ShoppingCartResponseDTO> addToCart(@Valid @RequestBody ShoppingCartRequestDTO request) {
-        return ResponseEntity.ok(shoppingCartService.addToCart(request));
-    }
-
-    @DeleteMapping("/remove")
-    public ResponseEntity<ShoppingCartResponseDTO> removeFromCart(@Valid @RequestBody ShoppingCartRequestDTO request) {
-        return ResponseEntity.ok(shoppingCartService.removeFromCart(request));
-    }
-
     @GetMapping("/{customerId}")
     public ResponseEntity<ShoppingCartResponseDTO> getShoppingCartByCustomerId(@PathVariable UUID customerId) {
         return ResponseEntity.ok(shoppingCartService.getShoppingCartByCustomerId(customerId));
+    }
+
+    @PostMapping("/{customerId}")
+    public ResponseEntity<ShoppingCartResponseDTO> addToCart(@PathVariable String customerId,
+                                                             @Valid @RequestBody ShoppingCartRequestDTO request) {
+        return ResponseEntity.ok(shoppingCartService.addToCart(customerId, request));
+    }
+
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<ShoppingCartResponseDTO> removeFromCart(@PathVariable String customerId,
+                                                                  @Valid @RequestBody ShoppingCartRequestDTO request) {
+        return ResponseEntity.ok(shoppingCartService.removeFromCart(customerId, request));
     }
 }

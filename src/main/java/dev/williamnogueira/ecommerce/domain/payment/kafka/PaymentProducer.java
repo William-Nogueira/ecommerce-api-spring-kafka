@@ -32,7 +32,7 @@ public class PaymentProducer {
             throw new PaymentStatusException(ORDER_STATUS_MUST_BE_PENDING);
         }
 
-        log.info(SENDING_PAYMENT_REQUEST, orderId);
+        log.trace(SENDING_PAYMENT_REQUEST, orderId);
         kafkaTemplate.send(PAYMENT_TOPIC, orderId);
         return new PaymentProducerResponseDTO(PAYMENT_REQUEST_IS_NOW_BEING_PROCESSED);
     }

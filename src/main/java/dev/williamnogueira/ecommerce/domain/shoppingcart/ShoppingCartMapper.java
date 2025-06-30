@@ -19,7 +19,7 @@ interface ShoppingCartMapper {
     ShoppingCartResponseDTO toResponseDTO(ShoppingCartEntity entity);
 
     @Mapping(target = "productId", source = "product.id")
-    @Mapping(target = "productName", source = "product.name")  // Assuming 'name' is the correct field
+    @Mapping(target = "productName", source = "product.name")
     @Mapping(target = "totalPrice", expression = "java(item.getPriceAtAddedTime().multiply(BigDecimal.valueOf(item.getQuantity())))")
     ShoppingCartItemResponseDTO toResponseDTO(ShoppingCartItemEntity item);
 

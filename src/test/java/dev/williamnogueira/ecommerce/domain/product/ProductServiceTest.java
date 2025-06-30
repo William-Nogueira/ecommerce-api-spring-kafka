@@ -18,16 +18,17 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-import static dev.williamnogueira.ecommerce.domain.product.ProductTestUtils.createInvalidProductRequestDTO;
-import static dev.williamnogueira.ecommerce.domain.product.ProductTestUtils.createProductEntity;
-import static dev.williamnogueira.ecommerce.domain.product.ProductTestUtils.createProductRequestDTO;
-import static dev.williamnogueira.ecommerce.domain.product.ProductTestUtils.createProductResponseDTO;
-import static dev.williamnogueira.ecommerce.domain.product.ProductTestUtils.createProductWithNewSku;
+import static dev.williamnogueira.ecommerce.utils.ProductTestUtils.createInvalidProductRequestDTO;
+import static dev.williamnogueira.ecommerce.utils.ProductTestUtils.createProductEntity;
+import static dev.williamnogueira.ecommerce.utils.ProductTestUtils.createProductRequestDTO;
+import static dev.williamnogueira.ecommerce.utils.ProductTestUtils.createProductResponseDTO;
+import static dev.williamnogueira.ecommerce.utils.ProductTestUtils.createProductWithNewSku;
 import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.INVALID_CATEGORY;
+import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.PRODUCT_NOT_FOUND_WITH_ID;
 import static dev.williamnogueira.ecommerce.infrastructure.constants.ErrorMessages.SKU_ALREADY_EXISTS;
-import static dev.williamnogueira.ecommerce.utils.TestUtils.ID;
+import static dev.williamnogueira.ecommerce.utils.TestConstants.ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatException;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -150,8 +151,10 @@ class ProductServiceTest {
         var productRequestDTOInvalidCategory = createInvalidProductRequestDTO();
 
         // act & assert
-        var exception = assertThrows(InvalidCategoryException.class, () -> productService.create(productRequestDTOInvalidCategory));
-        assertThat(exception.getMessage()).contains(String.format(INVALID_CATEGORY, productRequestDTOInvalidCategory.category()));
+        assertThatException()
+                .isThrownBy(() -> productService.create(productRequestDTOInvalidCategory))
+                .isInstanceOf(InvalidCategoryException.class)
+                .withMessageContaining(String.format(INVALID_CATEGORY, productRequestDTOInvalidCategory.category()));
         verify(productRepository).existsBySku(productRequestDTOInvalidCategory.sku());
     }
 
@@ -161,8 +164,10 @@ class ProductServiceTest {
         when(productRepository.existsBySku(productRequestDTO.sku())).thenReturn(true);
 
         // act & assert
-        var exception = assertThrows(DuplicateProductException.class, () -> productService.create(productRequestDTO));
-        assertThat(exception.getMessage()).contains(String.format(SKU_ALREADY_EXISTS));
+        assertThatException()
+                .isThrownBy(() -> productService.create(productRequestDTO))
+                .isInstanceOf(DuplicateProductException.class)
+                .withMessageContaining(SKU_ALREADY_EXISTS);
         verify(productRepository).existsBySku(productRequestDTO.sku());
     }
 
@@ -206,8 +211,10 @@ class ProductServiceTest {
         when(productRepository.existsBySku(productRequestDTOWithNewSku.sku())).thenReturn(true);
 
         // act & assert
-        var exception = assertThrows(DuplicateProductException.class, () -> productService.updateById(ID, productRequestDTOWithNewSku));
-        assertThat(exception.getMessage()).contains(String.format(SKU_ALREADY_EXISTS));
+        assertThatException()
+                .isThrownBy(() -> productService.updateById(ID, productRequestDTOWithNewSku))
+                .isInstanceOf(DuplicateProductException.class)
+                .withMessageContaining(SKU_ALREADY_EXISTS);
         verify(productRepository).existsBySku(productRequestDTOWithNewSku.sku());
     }
 
@@ -241,7 +248,10 @@ class ProductServiceTest {
         when(productRepository.findByIdAndActiveTrue(ID)).thenReturn(Optional.empty());
 
         // act & assert
-        assertThrows(ProductNotFoundException.class, () -> productService.getEntity(ID));
+        assertThatException()
+                .isThrownBy(() -> productService.getEntity(ID))
+                .isInstanceOf(ProductNotFoundException.class)
+                .withMessageContaining(String.format(PRODUCT_NOT_FOUND_WITH_ID, ID));
     }
 
     @Test

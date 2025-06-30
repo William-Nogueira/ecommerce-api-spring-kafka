@@ -8,8 +8,6 @@ import java.util.UUID;
 public record ShoppingCartRequestDTO(
         @NotNull
         UUID productId,
-        @NotNull
-        UUID customerId,
         @Positive
         Integer quantity
 ) {}

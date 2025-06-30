@@ -1,23 +1,20 @@
 package dev.williamnogueira.ecommerce.domain.customer;
 
 import dev.williamnogueira.ecommerce.domain.address.AddressEntity;
+import dev.williamnogueira.ecommerce.domain.common.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
-import java.util.UUID;
 
 @Entity(name = "Customer")
 @Table(name = "customer")
@@ -25,12 +22,8 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CustomerEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
+@SuperBuilder
+public class CustomerEntity extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
